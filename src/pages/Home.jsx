@@ -141,7 +141,6 @@ const Home = () => {
     return () => clearTimeout(timeoutId);
   }, [searchQuery, searchPosts]);
 
-  // Garantir que displayPosts seja sempre um array
   const displayPosts = React.useMemo(() => {
     const source = searchQuery.trim() ? searchResults : posts;
     return Array.isArray(source) ? source : [];

@@ -18,7 +18,6 @@ export const PostProvider = ({ children }) => {
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
 
-  // Carregar todos os posts
   const loadPosts = async () => {
     setLoading(true);
     try {
@@ -34,7 +33,6 @@ export const PostProvider = ({ children }) => {
     }
   };
 
-  // Buscar posts
   const searchPosts = async (query) => {
     if (!query.trim()) {
       setSearchResults([]);
@@ -56,7 +54,6 @@ export const PostProvider = ({ children }) => {
     }
   };
 
-  // Criar post
   const createPost = async (postData) => {
     try {
       const newPost = await postService.createPost(postData);
@@ -71,7 +68,6 @@ export const PostProvider = ({ children }) => {
     }
   };
 
-  // Atualizar post
   const updatePost = async (id, postData) => {
     try {
       const updatedPost = await postService.updatePost(id, postData);
@@ -88,7 +84,6 @@ export const PostProvider = ({ children }) => {
     }
   };
 
-  // Deletar post
   const deletePost = async (id) => {
     try {
       await postService.deletePost(id);
@@ -102,7 +97,6 @@ export const PostProvider = ({ children }) => {
     }
   };
 
-  // Carregar posts na inicialização
   useEffect(() => {
     loadPosts();
   }, []);
