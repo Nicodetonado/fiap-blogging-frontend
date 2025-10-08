@@ -146,8 +146,10 @@ const PostDetail = () => {
     const loadPost = async () => {
       try {
         setLoading(true);
-        const data = await postService.getPostById(id);
-        setPost(data.post || data);
+        const response = await postService.getPostById(id);
+
+        const postData = response?.data || response?.post || response;
+        setPost(postData);
       } catch (error) {
         console.error('Erro ao carregar post:', error);
         setError('Post não encontrado');
