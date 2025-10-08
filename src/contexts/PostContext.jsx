@@ -23,10 +23,12 @@ export const PostProvider = ({ children }) => {
     setLoading(true);
     try {
       const data = await postService.getAllPosts();
-      setPosts(data.posts || data);
+      const postsArray = data.posts || data || [];
+      setPosts(Array.isArray(postsArray) ? postsArray : []);
     } catch (error) {
       console.error('Erro ao carregar posts:', error);
       toast.error('Erro ao carregar posts');
+      setPosts([]);
     } finally {
       setLoading(false);
     }
@@ -43,7 +45,8 @@ export const PostProvider = ({ children }) => {
     setIsSearching(true);
     try {
       const data = await postService.searchPosts(query);
-      setSearchResults(data.posts || data);
+      const resultsArray = data.posts || data || [];
+      setSearchResults(Array.isArray(resultsArray) ? resultsArray : []);
     } catch (error) {
       console.error('Erro ao buscar posts:', error);
       toast.error('Erro ao buscar posts');
@@ -57,7 +60,8 @@ export const PostProvider = ({ children }) => {
   const createPost = async (postData) => {
     try {
       const newPost = await postService.createPost(postData);
-      setPosts(prev => [newPost.post, ...prev]);
+      const createdPost = newPost.post || newPost;
+      setPosts(prev => [createdPost, ...prev]);
       toast.success('Post criado com sucesso!');
       return newPost;
     } catch (error) {
@@ -71,8 +75,9 @@ export const PostProvider = ({ children }) => {
   const updatePost = async (id, postData) => {
     try {
       const updatedPost = await postService.updatePost(id, postData);
+      const updatedPostData = updatedPost.post || updatedPost;
       setPosts(prev => prev.map(post => 
-        post._id === id ? updatedPost.post : post
+        post._id === id ? updatedPostData : post
       ));
       toast.success('Post atualizado com sucesso!');
       return updatedPost;

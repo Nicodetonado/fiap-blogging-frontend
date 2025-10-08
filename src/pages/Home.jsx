@@ -141,7 +141,12 @@ const Home = () => {
     return () => clearTimeout(timeoutId);
   }, [searchQuery, searchPosts]);
 
-  const displayPosts = searchQuery.trim() ? searchResults : posts;
+  // Garantir que displayPosts seja sempre um array
+  const displayPosts = React.useMemo(() => {
+    const source = searchQuery.trim() ? searchResults : posts;
+    return Array.isArray(source) ? source : [];
+  }, [searchQuery, searchResults, posts]);
+  
   const isLoading = loading || isSearching;
 
   const formatDate = (dateString) => {

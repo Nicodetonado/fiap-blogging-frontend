@@ -3,8 +3,14 @@ import api from './api';
 export const postService = {
   // Buscar todos os posts
   async getAllPosts() {
-    const response = await api.get('/posts');
-    return response.data;
+    try {
+      const response = await api.get('/posts');
+      return response.data;
+    } catch (error) {
+      console.error('Erro na API getAllPosts:', error);
+      // Retornar array vazio em caso de erro
+      return { posts: [] };
+    }
   },
 
   // Buscar post por ID
@@ -15,8 +21,14 @@ export const postService = {
 
   // Buscar posts por termo
   async searchPosts(query) {
-    const response = await api.get(`/posts/search?q=${encodeURIComponent(query)}`);
-    return response.data;
+    try {
+      const response = await api.get(`/posts/search?q=${encodeURIComponent(query)}`);
+      return response.data;
+    } catch (error) {
+      console.error('Erro na API searchPosts:', error);
+      // Retornar array vazio em caso de erro
+      return { posts: [] };
+    }
   },
 
   // Criar novo post
