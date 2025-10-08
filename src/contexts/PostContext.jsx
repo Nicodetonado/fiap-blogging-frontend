@@ -21,8 +21,9 @@ export const PostProvider = ({ children }) => {
   const loadPosts = async () => {
     setLoading(true);
     try {
-      const data = await postService.getAllPosts();
-      const postsArray = data.posts || data || [];
+      const response = await postService.getAllPosts();
+    
+      const postsArray = response?.data?.posts || response?.posts || response || [];
       setPosts(Array.isArray(postsArray) ? postsArray : []);
     } catch (error) {
       console.error('Erro ao carregar posts:', error);
@@ -42,8 +43,11 @@ export const PostProvider = ({ children }) => {
 
     setIsSearching(true);
     try {
-      const data = await postService.searchPosts(query);
-      const resultsArray = data.posts || data || [];
+      const response = await postService.searchPosts(query);
+      console.log('Response searchPosts:', response); // Debug
+      
+      // A API retorna: { success: true, data: { posts: [...] } }
+      const resultsArray = response?.data?.posts || response?.posts || response || [];
       setSearchResults(Array.isArray(resultsArray) ? resultsArray : []);
     } catch (error) {
       console.error('Erro ao buscar posts:', error);
@@ -56,11 +60,14 @@ export const PostProvider = ({ children }) => {
 
   const createPost = async (postData) => {
     try {
-      const newPost = await postService.createPost(postData);
-      const createdPost = newPost.post || newPost;
+      const response = await postService.createPost(postData);
+      console.log('Response createPost:', response); // Debug
+      
+      // A API retorna: { success: true, data: post }
+      const createdPost = response?.data || response?.post || response;
       setPosts(prev => [createdPost, ...prev]);
       toast.success('Post criado com sucesso!');
-      return newPost;
+      return response;
     } catch (error) {
       console.error('Erro ao criar post:', error);
       toast.error('Erro ao criar post');
@@ -70,13 +77,16 @@ export const PostProvider = ({ children }) => {
 
   const updatePost = async (id, postData) => {
     try {
-      const updatedPost = await postService.updatePost(id, postData);
-      const updatedPostData = updatedPost.post || updatedPost;
+      const response = await postService.updatePost(id, postData);
+      console.log('Response updatePost:', response); // Debug
+      
+      // A API retorna: { success: true, data: post }
+      const updatedPostData = response?.data || response?.post || response;
       setPosts(prev => prev.map(post => 
         post._id === id ? updatedPostData : post
       ));
       toast.success('Post atualizado com sucesso!');
-      return updatedPost;
+      return response;
     } catch (error) {
       console.error('Erro ao atualizar post:', error);
       toast.error('Erro ao atualizar post');

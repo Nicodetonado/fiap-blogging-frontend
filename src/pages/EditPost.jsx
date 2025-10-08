@@ -263,15 +263,16 @@ const EditPost = () => {
     const loadPost = async () => {
       try {
         setIsLoadingPost(true);
-        const data = await postService.getPostById(id);
-        const postData = data.post || data;
+        const response = await postService.getPostById(id);
+    
+        const postData = response?.data || response?.post || response;
         setPost(postData);
         
         // Preencher o formulário com os dados do post
-        setValue('title', postData.title);
-        setValue('content', postData.content);
-        setValue('author', postData.author);
-        setTags(postData.tags || []);
+        setValue('title', postData?.title || '');
+        setValue('content', postData?.content || '');
+        setValue('author', postData?.author || '');
+        setTags(postData?.tags || []);
       } catch (error) {
         console.error('Erro ao carregar post:', error);
         toast.error('Erro ao carregar post');
