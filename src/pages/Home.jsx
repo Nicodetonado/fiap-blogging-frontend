@@ -150,14 +150,21 @@ const Home = () => {
   const isLoading = loading || isSearching;
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('pt-BR', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    });
+    if (!dateString) return 'Data não disponível';
+    try {
+      return new Date(dateString).toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      });
+    } catch (error) {
+      console.error('Erro ao formatar data:', error);
+      return 'Data inválida';
+    }
   };
 
   const getExcerpt = (content, maxLength = 150) => {
+    if (!content || typeof content !== 'string') return '';
     if (content.length <= maxLength) return content;
     return content.substring(0, maxLength) + '...';
   };
@@ -195,26 +202,26 @@ const Home = () => {
       ) : (
         <PostsGrid>
           {displayPosts.map((post) => (
-            <PostCard key={post._id} to={`/post/${post._id}`}>
-              <PostTitle>{post.title}</PostTitle>
-              <PostExcerpt>{getExcerpt(post.content)}</PostExcerpt>
+            <PostCard key={post?._id || Math.random()} to={`/post/${post?._id}`}>
+              <PostTitle>{post?.title || 'Título não disponível'}</PostTitle>
+              <PostExcerpt>{getExcerpt(post?.content)}</PostExcerpt>
               
               <PostMeta>
                 <MetaItem>
                   <User size={14} />
-                  {post.author}
+                  {post?.author || 'Autor não informado'}
                 </MetaItem>
                 <MetaItem>
                   <Calendar size={14} />
-                  {formatDate(post.createdAt)}
+                  {post?.createdAt ? formatDate(post.createdAt) : 'Data não disponível'}
                 </MetaItem>
                 <MetaItem>
                   <Clock size={14} />
-                  {post.readTime} min de leitura
+                  {post?.readTime || 1} min de leitura
                 </MetaItem>
               </PostMeta>
               
-              {post.tags && post.tags.length > 0 && (
+              {post?.tags && Array.isArray(post.tags) && post.tags.length > 0 && (
                 <Tags>
                   {post.tags.map((tag, index) => (
                     <Tag key={index}>#{tag}</Tag>
