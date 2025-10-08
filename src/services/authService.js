@@ -1,13 +1,7 @@
-// Serviço de autenticação simulado
-// Em um projeto real, isso seria integrado com um sistema de autenticação real
-
 export const authService = {
-  // Simular login
   async login(credentials) {
-    // Simular delay da API
     await new Promise(resolve => setTimeout(resolve, 1000));
     
-    // Validação simples para demonstração
     if (credentials.email === 'professor@fiap.com' && credentials.password === '123456') {
       const user = {
         id: '1',
@@ -27,26 +21,27 @@ export const authService = {
     throw new Error('Credenciais inválidas');
   },
 
-  // Logout
   logout() {
     localStorage.removeItem('authToken');
     localStorage.removeItem('user');
   },
 
-  // Verificar se está autenticado
-  isAuthenticated() {
-    return !!localStorage.getItem('authToken');
-  },
-
-  // Obter usuário atual
   getCurrentUser() {
-    const user = localStorage.getItem('user');
-    return user ? JSON.parse(user) : null;
+    try {
+      const user = localStorage.getItem('user');
+      return user ? JSON.parse(user) : null;
+    } catch (error) {
+      console.error('Erro ao obter usuário:', error);
+      return null;
+    }
   },
 
-  // Verificar se é professor
-  isTeacher() {
-    const user = this.getCurrentUser();
-    return user && user.role === 'teacher';
+  isAuthenticated() {
+    const token = localStorage.getItem('authToken');
+    return !!token;
+  },
+
+  getToken() {
+    return localStorage.getItem('authToken');
   }
 };

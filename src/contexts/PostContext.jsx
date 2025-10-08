@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { postService } from '../services/postService';
 import toast from 'react-hot-toast';
 
@@ -18,7 +18,7 @@ export const PostProvider = ({ children }) => {
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
 
-  const loadPosts = async () => {
+  const loadPosts = useCallback(async () => {
     setLoading(true);
     try {
       const response = await postService.getAllPosts();
@@ -32,9 +32,9 @@ export const PostProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const searchPosts = async (query) => {
+  const searchPosts = useCallback(async (query) => {
     if (!query.trim()) {
       setSearchResults([]);
       setIsSearching(false);
@@ -44,9 +44,7 @@ export const PostProvider = ({ children }) => {
     setIsSearching(true);
     try {
       const response = await postService.searchPosts(query);
-      console.log('Response searchPosts:', response); // Debug
       
-      // A API retorna: { success: true, data: { posts: [...] } }
       const resultsArray = response?.data?.posts || response?.posts || response || [];
       setSearchResults(Array.isArray(resultsArray) ? resultsArray : []);
     } catch (error) {
@@ -56,14 +54,12 @@ export const PostProvider = ({ children }) => {
     } finally {
       setIsSearching(false);
     }
-  };
+  }, []);
 
-  const createPost = async (postData) => {
+  const createPost = useCallback(async (postData) => {
     try {
       const response = await postService.createPost(postData);
-      console.log('Response createPost:', response); // Debug
       
-      // A API retorna: { success: true, data: post }
       const createdPost = response?.data || response?.post || response;
       setPosts(prev => [createdPost, ...prev]);
       toast.success('Post criado com sucesso!');
@@ -73,14 +69,12 @@ export const PostProvider = ({ children }) => {
       toast.error('Erro ao criar post');
       throw error;
     }
-  };
+  }, []);
 
-  const updatePost = async (id, postData) => {
+  const updatePost = useCallback(async (id, postData) => {
     try {
       const response = await postService.updatePost(id, postData);
-      console.log('Response updatePost:', response); // Debug
       
-      // A API retorna: { success: true, data: post }
       const updatedPostData = response?.data || response?.post || response;
       setPosts(prev => prev.map(post => 
         post._id === id ? updatedPostData : post
@@ -92,9 +86,9 @@ export const PostProvider = ({ children }) => {
       toast.error('Erro ao atualizar post');
       throw error;
     }
-  };
+  }, []);
 
-  const deletePost = async (id) => {
+  const deletePost = useCallback(async (id) => {
     try {
       await postService.deletePost(id);
       setPosts(prev => prev.filter(post => post._id !== id));
@@ -105,11 +99,11 @@ export const PostProvider = ({ children }) => {
       toast.error('Erro ao deletar post');
       throw error;
     }
-  };
+  }, []);
 
   useEffect(() => {
     loadPosts();
-  }, []);
+  }, [loadPosts]);
 
   const value = {
     posts,

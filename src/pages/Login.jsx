@@ -4,259 +4,179 @@ import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { User, Lock, BookOpen, Eye, EyeOff } from 'lucide-react';
+import { User, Lock, BookOpen, Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { Button, Input } from '../components/ui';
+import { theme } from '../styles';
+import {
+  LoginContainer,
+  LoginCard,
+  LoginTitle,
+  LoginSubtitle,
+  FormGroup,
+  FormLabel,
+  FormError,
+  FormHelpText
+} from '../styles';
 import toast from 'react-hot-toast';
 
-const Container = styled.div`
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 2rem;
-`;
-
-const LoginCard = styled.div`
-  background: white;
-  border-radius: 16px;
-  padding: 3rem;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 400px;
+const LogoIcon = styled(BookOpen)`
+  color: ${theme.colors.primary.main};
+  margin-bottom: ${theme.spacing.md};
 `;
 
 const Logo = styled.div`
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: ${theme.spacing.xl};
 `;
 
-const LogoIcon = styled(BookOpen)`
-  color: #667eea;
-  margin-bottom: 1rem;
-`;
-
-const Title = styled.h1`
-  font-size: 2rem;
-  font-weight: 700;
-  color: #1f2937;
-  margin-bottom: 0.5rem;
-`;
-
-const Subtitle = styled.p`
-  color: #6b7280;
-  font-size: 1rem;
-`;
-
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-`;
-
-const InputGroup = styled.div`
+const PasswordInputWrapper = styled.div`
   position: relative;
-`;
-
-const Input = styled.input`
-  width: 100%;
-  padding: 1rem 1rem 1rem 3rem;
-  border: 2px solid #e5e7eb;
-  border-radius: 8px;
-  font-size: 1rem;
-  transition: border-color 0.2s;
-  
-  &:focus {
-    outline: none;
-    border-color: #667eea;
-  }
-  
-  &::placeholder {
-    color: #9ca3af;
-  }
-`;
-
-const Icon = styled.div`
-  position: absolute;
-  left: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #9ca3af;
 `;
 
 const PasswordToggle = styled.button`
   position: absolute;
-  right: 1rem;
+  right: ${theme.spacing.md};
   top: 50%;
   transform: translateY(-50%);
   background: none;
   border: none;
-  color: #9ca3af;
+  color: ${theme.colors.secondary.main};
   cursor: pointer;
-  padding: 0.25rem;
+  padding: ${theme.spacing.xs};
   
   &:hover {
-    color: #6b7280;
+    color: ${theme.colors.secondary.darkest};
   }
 `;
 
-const ErrorMessage = styled.span`
-  color: #ef4444;
-  font-size: 0.875rem;
-  margin-top: 0.25rem;
-`;
-
-const SubmitButton = styled.button`
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border: none;
-  padding: 1rem;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.2s;
-  
-  &:hover:not(:disabled) {
-    transform: translateY(-2px);
-  }
-  
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
-`;
-
-const DemoCredentials = styled.div`
-  background: #f3f4f6;
-  border-radius: 8px;
-  padding: 1rem;
-  margin-top: 1rem;
-  font-size: 0.875rem;
-  color: #374151;
-`;
-
-const DemoTitle = styled.h4`
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: #1f2937;
-`;
-
-const DemoText = styled.p`
-  margin: 0.25rem 0;
-`;
-
-const BackLink = styled(Link)`
+const BackToHomeLink = styled(Link)`
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  color: #667eea;
+  gap: ${theme.spacing.sm};
+  color: ${theme.colors.secondary.main};
   text-decoration: none;
-  margin-top: 1rem;
-  font-weight: 500;
+  font-size: ${theme.fontSize.sm};
+  font-weight: ${theme.fontWeight.medium};
+  margin-top: ${theme.spacing.lg};
+  padding: ${theme.spacing.sm};
+  border-radius: ${theme.borderRadius.md};
+  transition: all ${theme.transitions.normal};
   
   &:hover {
-    text-decoration: underline;
+    color: ${theme.colors.primary.main};
+    background-color: ${theme.colors.primary.lighter};
   }
 `;
 
-const schema = yup.object({
-  email: yup
-    .string()
-    .email('Email inválido')
-    .required('Email é obrigatório'),
-  password: yup
-    .string()
-    .min(6, 'Senha deve ter pelo menos 6 caracteres')
-    .required('Senha é obrigatória'),
-});
-
 const Login = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const { login } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const validationSchema = yup.object({
+    email: yup
+      .string()
+      .email('Email deve ter um formato válido')
+      .required('Email é obrigatório'),
+    password: yup
+      .string()
+      .min(6, 'Senha deve ter pelo menos 6 caracteres')
+      .required('Senha é obrigatória'),
+  });
 
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(validationSchema),
   });
 
-  const from = location.state?.from?.pathname || '/';
-
   const onSubmit = async (data) => {
-    setIsLoading(true);
+    setLoading(true);
     try {
       await login(data);
       toast.success('Login realizado com sucesso!');
+      
+      const from = location.state?.from?.pathname || '/';
       navigate(from, { replace: true });
     } catch (error) {
       toast.error(error.message || 'Erro ao fazer login');
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
   return (
-    <Container>
+    <LoginContainer>
       <LoginCard>
         <Logo>
           <LogoIcon size={48} />
-          <Title>FIAP Blog</Title>
-          <Subtitle>Área do Professor</Subtitle>
+          <LoginTitle>FIAP Blog</LoginTitle>
+          <LoginSubtitle>
+            Sistema de blogging para professores
+          </LoginSubtitle>
         </Logo>
 
-        <Form onSubmit={handleSubmit(onSubmit)}>
-          <InputGroup>
-            <Icon>
-              <User size={20} />
-            </Icon>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <FormGroup>
+            <FormLabel>Email</FormLabel>
             <Input
               type="email"
-              placeholder="Email"
+              placeholder="Digite seu email"
+              error={errors.email?.message}
               {...register('email')}
+              fullWidth
             />
-            {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
-          </InputGroup>
+          </FormGroup>
 
-          <InputGroup>
-            <Icon>
-              <Lock size={20} />
-            </Icon>
-            <Input
-              type={showPassword ? 'text' : 'password'}
-              placeholder="Senha"
-              {...register('password')}
-            />
-            <PasswordToggle
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-            </PasswordToggle>
-            {errors.password && <ErrorMessage>{errors.password.message}</ErrorMessage>}
-          </InputGroup>
+          <FormGroup>
+            <FormLabel>Senha</FormLabel>
+            <PasswordInputWrapper>
+              <Input
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Digite sua senha"
+                error={errors.password?.message}
+                {...register('password')}
+                fullWidth
+              />
+              <PasswordToggle
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </PasswordToggle>
+            </PasswordInputWrapper>
+          </FormGroup>
 
-          <SubmitButton type="submit" disabled={isLoading}>
-            {isLoading ? 'Entrando...' : 'Entrar'}
-          </SubmitButton>
-        </Form>
+          <Button
+            type="submit"
+            variant="primary"
+            fullWidth
+            loading={loading}
+            disabled={loading}
+          >
+            Entrar
+          </Button>
+        </form>
 
-        <DemoCredentials>
-          <DemoTitle>Credenciais de Demonstração:</DemoTitle>
-          <DemoText><strong>Email:</strong> professor@fiap.com</DemoText>
-          <DemoText><strong>Senha:</strong> 123456</DemoText>
-        </DemoCredentials>
+        <FormHelpText>
+          <strong>Credenciais de demonstração:</strong><br />
+          Email: professor@fiap.com<br />
+          Senha: 123456
+        </FormHelpText>
 
-        <BackLink to="/">
-          ← Voltar ao blog
-        </BackLink>
+        <div style={{ textAlign: 'center' }}>
+          <BackToHomeLink to="/">
+            <ArrowLeft size={16} />
+            Voltar para a página principal
+          </BackToHomeLink>
+        </div>
       </LoginCard>
-    </Container>
+    </LoginContainer>
   );
 };
 

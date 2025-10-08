@@ -1,0 +1,83 @@
+╔═══════════════════════════════════════════════════════╗
+║                TECH CHALLENGE PÓS-FULLSTACK 2025 - FIAP                    ║
+║                                                                            ║
+║                   FRONTEND DE BLOGGING PARA PROFESSORES                    ║
+║                                                                            ║
+╠═══════════════════════════════════════════════════════╣
+║                                                                            ║
+║  📚 REPOSITÓRIO GITHUB:                                                   ║
+║  https://github.com/Nicodetonado/fiap-blogging-frontend                    ║
+║  O projeto se encontra no arquivo .zip junto a esse .txt pelo nome de      ║
+║  "fiap-blogging-frontend" e pode ser usado ou clonado pela url acima.       ║
+║                                                                            ║
+║                                                                            ║
+║  🎯 DESCRIÇÃO DO PROJETO:                                                 ║
+║  Interface React moderna e responsiva para criação e gerenciamento de     ║
+║  posts educacionais, desenvolvida com Design System consistente e          ║
+║  integração completa com a API REST.                                       ║
+║                                                                            ║
+║  🏗️ ARQUITETURA DO SISTEMA:                                               ║
+║  • Component-Based Architecture com componentes reutilizáveis              ║
+║  • Context API para gerenciamento de estado global                         ║
+║  • Custom Hooks para lógica reutilizável                                   ║
+║  • Service Layer para abstração da comunicação com API                     ║
+║  • Design System centralizado com tema consistente                         ║
+║                                                                            ║
+║  🛠️ TECNOLOGIAS UTILIZADAS:                                               ║
+║  • Frontend: React 18 + Vite + React Router DOM                            ║
+║  • Estilização: Styled Components + Design System                         ║
+║  • Formulários: React Hook Form + Validação customizada                    ║
+║  • HTTP Client: Axios com interceptors                                     ║
+║  • UI/UX: Lucide React + React Hot Toast                                  ║
+║  • Qualidade: ESLint + Prettier + Custom Hooks                            ║
+║                                                                            ║
+║  📖 DOCUMENTAÇÃO COMPLETA:                                                ║
+║  Toda a documentação técnica detalhada está disponível no README          ║
+║  do repositório GitHub.                                                    ║
+║                                                                            ║
+║  🎬 APRESENTAÇÃO EM VÍDEO:                                                ║
+║  O vídeo de apresentação contém:                                           ║
+║  • Demonstração prática da interface                                       ║
+║  • Explicação do Design System                                             ║
+║  • Arquitetura de componentes                                              ║
+║  • Integração com API REST                                                 ║
+║                                                                            ║
+║  📊 ESTATÍSTICAS DO PROJETO:                                              ║
+║  • 6 páginas principais responsivas                                        ║
+║  • 50+ componentes reutilizáveis                                           ║
+║  • 5 hooks customizados                                                    ║
+║  • 8 rotas (3 públicas, 5 protegidas)                                      ║
+║                                                                            ║
+║  🚀 FUNCIONALIDADES PRINCIPAIS:                                           ║
+║  • Interface moderna com Design System consistente                         ║
+║  • CRUD completo de posts educacionais                                     ║
+║  • Sistema de busca em tempo real com debounce                             ║
+║  • Autenticação para professores                                           ║
+║  • Design responsivo para mobile e desktop                                 ║
+║  • Validação robusta de formulários                                        ║
+║  • Sistema de tags para organização                                       ║
+║  • Notificações elegantes                                                  ║
+║                                                                            ║
+║  🎨 DESIGN SYSTEM:                                                         ║
+║  • Cores: Vermelho (#C8102E) + Grafite (#475569) + Branco                ║
+║  • Tipografia: Poppins (Google Fonts)                                     ║
+║  • Espaçamentos: Múltiplos de 8px para design orgânico                    ║
+║  • Componentes: Button, Input, Card, Form com variantes                   ║
+║  • Responsividade: Mobile-first design                                     ║
+║                                                                            ║
+║  🔧 MELHORIAS RECENTES:                                                    ║
+║  • CSS inline removido - Todo CSS no sistema de design                    ║
+║  • Performance otimizada com hooks memoizados                             ║
+║  • Loop infinito na busca corrigido                                       ║
+║  • Sistema de tags totalmente funcional                                    ║
+║  • Validação de formulários simplificada                                  ║
+║                                                                            ║
+║  📋 INFORMAÇÕES ADICIONAIS:                                               ║
+║  Para mais detalhes técnicos e relatos, consulte o README do GitHub.       ║
+║                                                                            ║
+╠═══════════════════════════════════════════════════════╣
+║                                                                            ║
+║  Desenvolvido por: Nicolas Navarro                                         ║
+║  Tech Challenge PÓS-FULLSTACK 2025 - FIAP                                  ║
+║                                                                            ║
+╚═══════════════════════════════════════════════════════╝

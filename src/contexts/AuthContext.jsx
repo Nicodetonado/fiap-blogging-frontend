@@ -16,7 +16,6 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Verificar se há usuário logado ao carregar a aplicação
     const currentUser = authService.getCurrentUser();
     if (currentUser && authService.isAuthenticated()) {
       setUser(currentUser);
